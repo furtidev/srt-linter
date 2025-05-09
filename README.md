@@ -1,7 +1,9 @@
 # `srt-linter` 💬🔍
 <p align="center">
 <img src="./assets/demo.gif">
-
+<img src="https://img.shields.io/github/v/tag/furtidev/srt-linter?style=plastic&label=release&labelColor=%20%236f4d3d%20&color=%20%23cb9867%20">
+<img src="https://img.shields.io/github/actions/workflow/status/furtidev/srt-linter/ci.yml?branch=main&style=plastic&labelColor=%236f4d3d%20&color=%23cb9867">
+<img src="https://img.shields.io/github/actions/workflow/status/furtidev/srt-linter/cd.yml?style=plastic&label=deploy&labelColor=%236f4d3d%20&color=%23cb9867">
 </p>
 
 💬🔍 `srt-linter` is a CLI tool to inspect and detect issues inside [SubRip Text](https://en.wikipedia.org/wiki/SubRip) (`.srt`) files.
