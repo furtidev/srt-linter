@@ -56,7 +56,7 @@ $ srt-linter -s -v ./the.sopranos.s6.ep4.srt
 
 I'm using `mpv` and there you go:
 
-<img src="./assets/mpv-screenshot.png" width=80%>
+<img src="./assets/mpv_screenshot.png" width=80%>
 
 ## Wishlist 💭
 - [ ] Implement a TUI to visualize the subtitles.
