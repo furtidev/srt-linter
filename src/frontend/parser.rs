@@ -46,7 +46,7 @@ impl Parser {
             let chars = line.chars().collect::<Vec<char>>();
 
             for (i, &c) in chars.iter().enumerate() {
-                if c == '<' && !(chars.len() > i + 2) || !(chars.len() > i + 3) {
+                if c == '<' && (chars.len() <= i + 2) || (chars.len() <= i + 3) {
                     continue;
                 }
 
