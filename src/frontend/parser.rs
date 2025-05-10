@@ -17,6 +17,7 @@ pub struct Parser {
     input: Vec<Token>,
     curr_loc: Option<usize>,
     strict: bool,
+    issues: usize,
 }
 
 impl Parser {
@@ -26,6 +27,7 @@ impl Parser {
             curr_loc: Some(0),
             input,
             strict,
+            issues: 0
         }
     }
 
@@ -37,9 +39,48 @@ impl Parser {
         }
     }
 
+    fn check_markup_validity(&mut self, input: (Vec<String>, usize)) {
+        let mut open: Vec<usize> = vec![];
+
+        for (idx, line) in input.0.iter().enumerate() {
+            let chars = line.chars().collect::<Vec<char>>();
+
+            for (i, &c) in chars.iter().enumerate() {
+                if c == '<' && !(chars.len() > i + 2) || !(chars.len() > i + 3) {
+                    continue;
+                }
+
+                if (chars[i + 1] == 'i' || chars[i + 1] == 'b' || chars[i + 1] == 'u')
+                    && chars[i + 2] == '>'
+                {
+                    open.push((idx) + input.1);
+                }
+
+                if chars[i + 1] == '/'
+                    && (chars[i + 2] == 'i' || chars[i + 2] == 'b' || chars[i + 2] == 'u')
+                    && chars[i + 3] == '>'
+                {
+                    if open.is_empty() {
+                        print_log(LogLevel::Warning, &format!("(line {}) Stray markup closing tag detected.", (idx) + input.1));
+                        self.issues += 1;
+                        continue;
+                    }
+                    open.pop();
+                }
+            }
+        }
+
+        if !open.is_empty() {
+            self.issues += 1;
+            for ln in open {
+                print_log(LogLevel::Warning, &format!("(line {}) Unclosed markup detected.", ln));
+            }
+        }
+    }
+
     // TODO: the markup extension could be checked for here.
     /// Parse the tokens and produce a structured list of all records/subtitles.
-    pub fn parse(&mut self) -> (Vec<Subtitle>, usize) {
+    pub fn parse(&mut self) -> (Vec<Subtitle>, usize, usize) {
         let mut subtitles: Vec<Subtitle> = vec![];
         let mut total_lines: usize = 0;
         let mut sub_buf: Subtitle = Subtitle {
@@ -72,8 +113,12 @@ impl Parser {
                     }
                 }
                 Token::Subtitle(text) => {
-                    total_lines += text.len();
-                    sub_buf.text = Some(text.clone());
+                    total_lines += text.0.len();
+                    sub_buf.text = Some(text.0.clone());
+
+                    if self.strict {
+                        self.check_markup_validity(text.clone());
+                    }
 
                     subtitles.push(sub_buf);
                     sub_buf = Subtitle {
@@ -88,6 +133,6 @@ impl Parser {
             self.advance();
         }
 
-        (subtitles, total_lines)
+        (subtitles, total_lines, self.issues)
     }
 }

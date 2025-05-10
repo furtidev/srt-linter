@@ -66,11 +66,19 @@ fn main() -> ExitCode {
 
     // parse the file
     let mut parser = frontend::parser::Parser::new(tokens, cli.strict);
-    let (_, lines) = parser.parse(); // subtitles, line number
-    print_log(
-        LogLevel::Success,
-        &format!("File is structurally OK. Read {} line(s).", lines),
-    );
+    let (_, lines, issues) = parser.parse(); // subtitles, line number, issues
+
+    if issues > 0 {
+        print_log(
+            LogLevel::Warning,
+            &format!("File is structurally OK except for {} issue(s).", issues),
+        );
+    } else {
+        print_log(
+            LogLevel::Success,
+            &format!("File is structurally OK. Read {} line(s).", lines),
+        );
+    }
 
     ExitCode::SUCCESS
 }

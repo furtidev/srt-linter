@@ -8,7 +8,7 @@ pub enum Token {
     Count(usize, usize),
     StartTime(u64, usize),
     EndTime(u64, usize),
-    Subtitle(Vec<String>),
+    Subtitle((Vec<String>, usize)),
     Eof,
 }
 
@@ -256,7 +256,7 @@ impl Lexer {
 
                         lines.push(line);
                     }
-                    tokens.push(Token::Subtitle(lines));
+                    tokens.push(Token::Subtitle((lines, curr_loc + 1)));
                     self.state = LexState::Counter;
                 }
             }
