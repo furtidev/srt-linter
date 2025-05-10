@@ -27,7 +27,7 @@ impl Parser {
             curr_loc: Some(0),
             input,
             strict,
-            issues: 0
+            issues: 0,
         }
     }
 
@@ -61,7 +61,13 @@ impl Parser {
                     && chars[i + 3] == '>'
                 {
                     if open.is_empty() {
-                        print_log(LogLevel::Warning, &format!("(line {}) Stray markup closing tag detected.", (idx) + input.1));
+                        print_log(
+                            LogLevel::Warning,
+                            &format!(
+                                "(line {}) Stray markup closing tag detected.",
+                                (idx) + input.1
+                            ),
+                        );
                         self.issues += 1;
                         continue;
                     }
@@ -73,7 +79,10 @@ impl Parser {
         if !open.is_empty() {
             self.issues += 1;
             for ln in open {
-                print_log(LogLevel::Warning, &format!("(line {}) Unclosed markup detected.", ln));
+                print_log(
+                    LogLevel::Warning,
+                    &format!("(line {}) Unclosed markup detected.", ln),
+                );
             }
         }
     }
