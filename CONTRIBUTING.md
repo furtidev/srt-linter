@@ -26,12 +26,13 @@ To keep things orgazined, please format your commit messages accordingly to the 
   │    │                                               
   │    └─► e.g: lexer, parser, tui, cli                
   │                                                    
-  └──────►fix | docs | refactor | ci | tests | chore
+  └──────►feat | fix | docs | refactor | ci | tests | chore
 ```
 
 Example: `fix(lexer): don't generate duplicate tokens`
 
 Commit types:
+- `feat`: A new feature/addition.
 - `fix`: A bug fix.
 - `docs`: Change in documentation.
 - `refactor`: Changes in code that does not alter behavior.
