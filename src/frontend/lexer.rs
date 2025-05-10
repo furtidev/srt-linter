@@ -8,7 +8,7 @@ pub enum Token {
     Count(usize, usize),
     StartTime(u64, usize),
     EndTime(u64, usize),
-    Subtitle((Vec<String>, usize)),
+    Subtitle((Vec<String>, usize)), // lines, starting line number
     Eof,
 }
 
