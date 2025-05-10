@@ -32,10 +32,13 @@ fn test_token_generation_and_lexer_linting() {
             Token::Count(1, 1),
             Token::StartTime(136612, 2),
             Token::EndTime(139376, 2),
-            Token::Subtitle((vec![
-                "Senator, we're making".into(),
-                "our final approach into Coruscant.".into()
-            ], 3)),
+            Token::Subtitle((
+                vec![
+                    "Senator, we're making".into(),
+                    "our final approach into Coruscant.".into()
+                ],
+                3
+            )),
             Token::Count(2, 6),
             Token::StartTime(139482, 7),
             Token::EndTime(141609, 7),
