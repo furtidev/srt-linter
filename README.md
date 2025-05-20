@@ -17,19 +17,19 @@
 - [License ⚖️](#license-)
 
 ## Installation 📥
-### Cargo (building from scratch)
+### Cargo (building from scratch) 📦
 Install `srt-linter` with `cargo`:
 ```
 $ cargo install srt-linter
 ```
 
-### Homebrew (macOS only)
+### Homebrew (macOS only) 🍺
 Install `srt-linter` with `brew`:
 ```
-$ brew install furtidev/pub/srt_linter
+$ brew install furtidev/pub/srt-linter
 ```
 
-### Manual
+### Manual 💾
 You can get the latest pre-built binary from [here.](https://github.com/furtidev/srt-linter/releases) You may need to give it executable permissions.
 
 Note that on MacOS, you need to remove the `com.apple.quarantine` attribute from the binary:
