@@ -74,7 +74,7 @@ jobs:
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: target\x86_64-pc-windows-msvc\release\srt-linter.exe
-          asset_name: srt-linter.windows.x86_64.msvc
+          asset_name: srt-linter.windows.x86_64.msvc.exe
           tag: ${{ github.ref }}
           release_name: "Release v${{ env.RELEASE_VERSION }}"
           body: ${{steps.github_release.outputs.changelog}}
