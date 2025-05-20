@@ -1,6 +1,6 @@
 [package]
 name = "srt-linter"
-version = "0.1.0"
+version = "0.2.0"
 description = "Look for issues inside SubRip text (.srt) files"
 authors = ["furtidev <furtidev@tuta.io>"]
 license = "MIT"
@@ -12,3 +12,4 @@ edition = "2024"
 
 [dependencies]
 clap = { version = "4.5.37", features = ["derive"] }
+ratatui = "0.29.0"
