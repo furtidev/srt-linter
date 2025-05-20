@@ -4,12 +4,12 @@ use super::lexer::Token;
 use std::time::Duration;
 
 /// Repesents a singular record/subtitle.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Subtitle {
     id: Option<usize>,
-    start: Option<Duration>,
+    pub start: Option<Duration>,
     end: Option<Duration>,
-    text: Option<Vec<String>>,
+    pub text: Option<Vec<String>>,
 }
 
 /// Represents enviroment for parsing tokens generated earlier into structured data.
@@ -39,6 +39,7 @@ impl Parser {
         }
     }
 
+    // TODO: make this nicer and handle <font>
     fn check_markup_validity(&mut self, input: (Vec<String>, usize)) {
         let mut open: Vec<usize> = vec![];
 
