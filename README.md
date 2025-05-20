@@ -17,12 +17,25 @@
 - [License ⚖️](#license-)
 
 ## Installation 📥
+### Cargo (building from scratch)
 Install `srt-linter` with `cargo`:
 ```
 $ cargo install srt-linter
 ```
 
-If you don't have `cargo` or don't want to build `srt-linter` yourself, you can get the latest pre-built binary from [here.](https://github.com/furtidev/srt-linter/releases)
+### Homebrew (macOS only)
+Install `srt-linter` with `brew`:
+```
+$ brew install furtidev/pub/srt_linter
+```
+
+### Manual
+You can get the latest pre-built binary from [here.](https://github.com/furtidev/srt-linter/releases) You may need to give it executable permissions.
+
+Note that on MacOS, you need to remove the `com.apple.quarantine` attribute from the binary:
+```
+$ xattr -d com.apple.quarantine ./srt-linter.darwin.aarch64
+```
 
 ## Usage ⌨️
 `srt-linter` has a very simple interface:
