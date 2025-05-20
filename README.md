@@ -38,6 +38,7 @@ Arguments:
 Options:
   -v, --verbose  Logs additional information about internal actions
   -s, --strict   Enforces stricter rules for suspicious behavior
+  -t, --tui      Shows a TUI at the end
   -h, --help     Print help
   -V, --version  Print version
 ```
@@ -60,9 +61,13 @@ I'm using `mpv` and there you go:
 
 <img src="./assets/mpv_screenshot.png" width=80%>
 
+A similar interface is available in `srt-linter`, just pass in the `-t/--tui` flag:
+
+<img src="./assets/tui_screenshot.png" width=80%>
+
 ## Wishlist 💭
-- [ ] Implement a TUI to visualize the subtitles.
-- [ ] Implement `.srt` format's unofficial extensions.
+- [x] Implement a TUI to visualize the subtitles.
+- [x] Implement `.srt` format's unofficial markup extension.
 
 ## Contributing 🤝
 Hey, thanks! If you've found a bug or something that works unexpectedly, feel free to [open an issue](https://github.com/furtidev/srt-linter/issues/new). 
