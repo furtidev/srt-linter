@@ -1,13 +1,25 @@
 use clap::Parser;
-use std::{path::PathBuf, process::ExitCode};
+use std::{error, io, path::PathBuf, process::ExitCode};
+use tui::App;
 use utils::logging::{LogLevel, print_log};
 
+use ratatui::{
+    Terminal,
+    crossterm::{
+        event::{DisableMouseCapture, EnableMouseCapture},
+        execute,
+        terminal::{EnterAlternateScreen, LeaveAlternateScreen, disable_raw_mode, enable_raw_mode},
+    },
+    prelude::CrosstermBackend,
+};
+
 mod frontend;
+mod tui;
 mod utils;
 
 #[derive(Parser)]
 #[command(name = "srt-linter")]
-#[command(version = "0.1.0")]
+#[command(version = "0.2.0")]
 #[command(about = "Look for issues inside SubRip text (.srt) files.")]
 struct Cli {
     #[arg(
@@ -18,6 +30,8 @@ struct Cli {
     verbose: bool,
     #[arg(long, short, help = "Enforces stricter rules for suspicious behavior")]
     strict: bool,
+    #[arg(long, short, help = "Shows a TUI at the end")]
+    tui: bool,
     #[arg(value_parser = clap::value_parser!(PathBuf))]
     file_path: PathBuf,
 }
@@ -27,7 +41,8 @@ struct State {
     content: Vec<String>,
 }
 
-fn main() -> ExitCode {
+// the error variant is primarily for TUI errors.
+fn main() -> Result<ExitCode, Box<dyn error::Error>> {
     let cli = Cli::parse();
     let mut state = State {
         file_path: cli.file_path,
@@ -45,14 +60,14 @@ fn main() -> ExitCode {
 
     let mut lexer = match lexer_result {
         Ok(res) => res,
-        Err(e) => return e,
+        Err(e) => return Ok(e),
     };
 
     let lexed_result = lexer.lex();
 
     let (tokens, issues) = match lexed_result {
         Ok(res) => res,
-        Err(e) => return e,
+        Err(e) => return Ok(e),
     };
 
     if issues > 0 {
@@ -66,12 +81,15 @@ fn main() -> ExitCode {
 
     // parse the file
     let mut parser = frontend::parser::Parser::new(tokens, cli.strict);
-    let (_, lines, issues) = parser.parse(); // subtitles, line number, issues
+    let (subtitles, lines, issues) = parser.parse(); // subtitles, line number, issues
 
     if issues > 0 {
         print_log(
             LogLevel::Warning,
-            &format!("File is structurally OK except for {} issue(s).", issues),
+            &format!(
+                "File is structurally OK except for {} issue(s). Read {} line(s).",
+                issues, lines
+            ),
         );
     } else {
         print_log(
@@ -80,5 +98,25 @@ fn main() -> ExitCode {
         );
     }
 
-    ExitCode::SUCCESS
+    if cli.tui {
+        enable_raw_mode()?;
+        execute!(io::stdout(), EnterAlternateScreen, EnableMouseCapture)?;
+
+        let backend = CrosstermBackend::new(io::stdout());
+        let mut terminal = Terminal::new(backend)?;
+
+        let mut app = App::new(lines);
+
+        tui::run_tui(&mut terminal, (&subtitles, lines), &mut app)?;
+
+        disable_raw_mode()?;
+        execute!(
+            terminal.backend_mut(),
+            LeaveAlternateScreen,
+            DisableMouseCapture
+        )?;
+        terminal.show_cursor()?;
+    }
+
+    Ok(ExitCode::SUCCESS)
 }
